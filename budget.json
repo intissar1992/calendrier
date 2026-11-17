@@ -1,0 +1,16 @@
+[
+  {
+    "date": "2026-11-17",
+    "type": "Dépense",
+    "categorie": "Logement",
+    "libelle": "2000",
+    "montant": 5000
+  },
+  {
+    "date": "2026-11-17",
+    "type": "Revenu",
+    "categorie": "Salaire",
+    "libelle": "exit",
+    "montant": 2000
+  }
+]
