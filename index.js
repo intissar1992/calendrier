@@ -3,6 +3,7 @@ import { select, input, confirm } from '@inquirer/prompts';
 import dayjs from 'dayjs';
 import customParseFormat from 'dayjs/plugin/customParseFormat.js';
 import chalk from 'chalk';
+import { getJoursFeries, verifierVacancesScolaires } from './api.js';
 
 dayjs.extend(customParseFormat);
 
@@ -70,13 +71,37 @@ async function ajouterOperation(operations) {
     });
 
     const dateISO = dayjs(dateSaisie, 'DD/MM/YYYY').format('YYYY-MM-DD');
+    const annee = dayjs(dateSaisie, 'DD/MM/YYYY').year();
+
+    // Appels aux API externes (Jours fériés + Vacances scolaires Zone C)
+    console.log(chalk.gray('⏳ Vérification du calendrier officiel (jours fériés & vacances scolaires)...'));
+    const [joursFeries, nomVacances] = await Promise.all([
+        getJoursFeries(annee),
+        verifierVacancesScolaires(dateISO, 'Zone C')
+    ]);
+
+    const nomJourFerie = joursFeries[dateISO] || null;
+
+    // Alertes contextuelles lors de la saisie
+    if (nomJourFerie) {
+        console.log(chalk.magenta(`🎉 Info : Le ${dateSaisie} est un jour férié (${nomJourFerie}).`));
+        if (type === 'Revenu') {
+            console.log(chalk.yellow(`⚠️  Attention : Votre virement bancaire risque d'être décalé au jour ouvré suivant.`));
+        }
+    }
+
+    if (nomVacances) {
+        console.log(chalk.cyan(`🏖️  Info : Cette date tombe pendant les ${nomVacances}.`));
+    }
 
     operations.push({
         date: dateISO,
         type,
         categorie,
         libelle: libelle.trim(),
-        montant: parseFloat(montantStr.replace(',', '.'))
+        montant: parseFloat(montantStr.replace(',', '.')),
+        jourFerie: nomJourFerie,
+        vacances: nomVacances
     });
 
     sauvegarderOperations(operations);
@@ -97,20 +122,33 @@ function afficherCalendrier(operations) {
 
     let totalRevenus = 0;
     let totalDepenses = 0;
+    let totalDepensesConges = 0;
 
     for (const op of operationsTriees) {
         const dateFormatee = dayjs(op.date).format('DD/MM/YYYY');
         const montantFormate = op.montant.toFixed(2) + ' €';
 
+        // Construction des badges colorés si jour férié ou vacances
+        let badges = '';
+        if (op.jourFerie) {
+            badges += chalk.magenta(` 🎉 Jour férié (${op.jourFerie})`);
+        }
+        if (op.vacances) {
+            badges += chalk.cyan(` 🏖️ ${op.vacances}`);
+        }
+
         if (op.type === 'Revenu') {
             totalRevenus += op.montant;
             console.log(
-                `${chalk.gray(`[${dateFormatee}]`)} ${chalk.bold(op.categorie)} - ${op.libelle} : ${chalk.green(`+${montantFormate}`)}`
+                `${chalk.gray(`[${dateFormatee}]`)} ${chalk.bold(op.categorie)} - ${op.libelle} : ${chalk.green(`+${montantFormate}`)}${badges}`
             );
         } else {
             totalDepenses += op.montant;
+            if (op.jourFerie || op.vacances) {
+                totalDepensesConges += op.montant;
+            }
             console.log(
-                `${chalk.gray(`[${dateFormatee}]`)} ${chalk.bold(op.categorie)} - ${op.libelle} : ${chalk.red(`-${montantFormate}`)}`
+                `${chalk.gray(`[${dateFormatee}]`)} ${chalk.bold(op.categorie)} - ${op.libelle} : ${chalk.red(`-${montantFormate}`)}${badges}`
             );
         }
     }
@@ -118,10 +156,13 @@ function afficherCalendrier(operations) {
     const solde = totalRevenus - totalDepenses;
 
     console.log(chalk.blue('-------------------------------------------------------'));
-    console.log(`Total des revenus  : ${chalk.green('+' + totalRevenus.toFixed(2) + ' €')}`);
-    console.log(`Total des dépenses : ${chalk.red('-' + totalDepenses.toFixed(2) + ' €')}`);
+    console.log(`Total des revenus            : ${chalk.green('+' + totalRevenus.toFixed(2) + ' €')}`);
+    console.log(`Total des dépenses           : ${chalk.red('-' + totalDepenses.toFixed(2) + ' €')}`);
+    if (totalDepensesConges > 0) {
+        console.log(`Dont vacances / jours fériés : ${chalk.yellow(totalDepensesConges.toFixed(2) + ' €')}`);
+    }
     console.log(
-        `Solde disponible   : ${solde >= 0
+        `Solde disponible             : ${solde >= 0
             ? chalk.bgGreen.black.bold(` +${solde.toFixed(2)} € `)
             : chalk.bgRed.white.bold(` ${solde.toFixed(2)} € `)
         }`
