@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="aurora">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BudgetQuest ✨ - Intissar & Moataza</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ================= THÈMES ULTRA-COLORÉS & ANIMÉS ================= */
+        :root,
+        [data-theme="aurora"] {
+            --bg-animated: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a18cd1, #fbc2eb, #84fab0, #8fd3f4);
+            --glass-bg: rgba(255, 255, 255, 0.78);
+            --glass-border: rgba(255, 255, 255, 0.75);
+            --nav-bg: rgba(15, 23, 42, 0.85);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --accent-1: #6366f1;
+            --accent-2: #ec4899;
+            --shadow-glow: 0 20px 40px rgba(99, 102, 241, 0.18);
+        }
+
+        [data-theme="sunset"] {
+            --bg-animated: linear-gradient(-45deg, #ff512f, #dd2476, #ff9966, #ff5e62, #f9d423);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --nav-bg: rgba(45, 10, 25, 0.88);
+            --text-main: #1f1218;
+            --text-muted: #5c3a47;
+            --accent-1: #f43f5e;
+            --accent-2: #f59e0b;
+            --shadow-glow: 0 20px 40px rgba(244, 63, 94, 0.22);
+        }
+
+        [data-theme="emerald"] {
+            --bg-animated: linear-gradient(-45deg, #0ba360, #3cba92, #00cdac, #8ddad5, #43e97b);
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --nav-bg: rgba(4, 47, 46, 0.88);
+            --text-main: #042f2e;
+            --text-muted: #335c5b;
+            --accent-1: #059669;
+            --accent-2: #0284c7;
+            --shadow-glow: 0 20px 40px rgba(5, 150, 105, 0.2);
+        }
+
+        [data-theme="galaxy"] {
+            --bg-animated: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #4a0e4e, #1a1a2e);
+            --glass-bg: rgba(23, 25, 48, 0.78);
+            --glass-border: rgba(255, 255, 255, 0.16);
+            --nav-bg: rgba(9, 10, 22, 0.92);
+            --text-main: #f8fafc;
+            --text-muted: #cbd5e1;
+            --accent-1: #a855f7;
+            --accent-2: #ec4899;
+            --shadow-glow: 0 20px 40px rgba(168, 85, 247, 0.3);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: var(--bg-animated);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 3rem;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        /* Orbes lumineux flottants */
+        .bg-shapes .shape {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.65;
+            animation: floatOrb 10s infinite alternate ease-in-out;
+        }
+
+        .shape-1 {
+            width: 350px;
+            height: 350px;
+            background: #ff6b6b;
+            top: -80px;
+            left: -80px;
+        }
+
+        .shape-2 {
+            width: 420px;
+            height: 420px;
+            background: #4ecdc4;
+            bottom: -100px;
+            right: -80px;
+            animation-delay: 2s;
+        }
+
+        .shape-3 {
+            width: 300px;
+            height: 300px;
+            background: #ffe66d;
+            top: 35%;
+            left: 50%;
+            animation-delay: 4s;
+        }
+
+        @keyframes floatOrb {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(40px, -50px) scale(1.15);
+            }
+        }
+
+        #confetti-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ================= NAVBAR PREMIUM ================= */
+        .navbar {
+            background: var(--nav-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1260px;
+            margin: 0 auto;
+            padding: 0.9rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+        }
+
+        .brand-logo {
+            font-size: 2.2rem;
+            background: linear-gradient(135deg, #f43f5e, #8b5cf6);
+            width: 48px;
+            height: 48px;
+            display: grid;
+            place-items: center;
+            border-radius: 14px;
+            box-shadow: 0 6px 18px rgba(244, 63, 94, 0.45);
+            animation: pulseLogo 2.5s infinite;
+        }
+
+        @keyframes pulseLogo {
+
+            0%,
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+
+            50% {
+                transform: scale(1.08) rotate(-4deg);
+            }
+        }
+
+        .brand h1 {
+            font-size: 1.45rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .binome-tag {
+            display: inline-block;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 0.15rem 0.65rem;
+            border-radius: 999px;
+            background: linear-gradient(90deg, rgba(56, 189, 248, 0.25), rgba(244, 114, 182, 0.25));
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #f472b6;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 0.45rem;
+            flex-wrap: wrap;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 0.35rem;
+            border-radius: 999px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            color: #cbd5e1;
+            padding: 0.6rem 1.05rem;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .nav-btn:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: white;
+            box-shadow: 0 6px 18px rgba(236, 72, 153, 0.45);
+            transform: scale(1.03);
+        }
+
+        /* ================= CONTENEUR & ANIMATIONS PAGES ================= */
+        .container {
+            max-width: 1260px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .page-view {
+            display: none;
+        }
+
+        .page-view.active {
+            display: block;
+            animation: pagePop 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes pagePop {
+            0% {
+                opacity: 0;
+                transform: translateY(22px) scale(0.98);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* ================= CARTES GLASSMORPHISM ================= */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 1.75rem;
+            box-shadow: var(--shadow-glow);
+            transition: transform 0.3s ease;
+        }
+
+        .welcome-banner {
+            background: linear-gradient(135deg, #4f46e5 0%, #9333ea 50%, #ec4899 100%);
+            color: white;
+            padding: 2rem 2.25rem;
+            border-radius: 26px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.25rem;
+            margin-bottom: 1.75rem;
+            box-shadow: 0 18px 40px rgba(147, 51, 234, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .welcome-banner h2 {
+            font-size: 1.65rem;
+            font-weight: 800;
+            margin-bottom: 0.3rem;
+        }
+
+        /* ================= KPI CARDS ================= */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .kpi-card {
+            border-radius: 22px;
+            padding: 1.5rem;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 1.1rem;
+            box-shadow: 0 14px 30px rgba(0, 0, 0, 0.14);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-7px) scale(1.03);
+        }
+
+        .card-green {
+            background: linear-gradient(135deg, #059669, #10b981, #34d399);
+        }
+
+        .card-pink {
+            background: linear-gradient(135deg, #e11d48, #f43f5e, #fb7185);
+        }
+
+        .card-purple {
+            background: linear-gradient(135deg, #7c3aed, #8b5cf6, #c084fc);
+        }
+
+        .card-blue {
+            background: linear-gradient(135deg, #2563eb, #3b82f6, #38bdf8);
+        }
+
+        .kpi-icon {
+            font-size: 2.3rem;
+            background: rgba(255, 255, 255, 0.22);
+            width: 60px;
+            height: 60px;
+            display: grid;
+            place-items: center;
+            border-radius: 18px;
+            backdrop-filter: blur(6px);
+        }
+
+        .kpi-label {
+            font-size: 0.8rem;
+            opacity: 0.92;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .kpi-value {
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin-top: 0.2rem;
+        }
+
+        /* ================= GRILLES & PROJETS ================= */
+        .dashboard-split,
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.75rem;
+        }
+
+        @media (max-width: 880px) {
+
+            .dashboard-split,
+            .two-columns {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .projets-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+            gap: 1.4rem;
+        }
+
+        .projet-card {
+            border-radius: 24px;
+            padding: 1.6rem;
+            color: white;
+            box-shadow: 0 15px 32px rgba(0, 0, 0, 0.16);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .projet-card:hover {
+            transform: translateY(-7px) scale(1.02);
+        }
+
+        .grad-blue {
+            background: linear-gradient(135deg, #0284c7, #2563eb, #38bdf8);
+        }
+
+        .grad-sunset {
+            background: linear-gradient(135deg, #ea580c, #e11d48, #f43f5e);
+        }
+
+        .grad-emerald {
+            background: linear-gradient(135deg, #059669, #0d9488, #34d399);
+        }
+
+        .grad-purple {
+            background: linear-gradient(135deg, #6d28d9, #9333ea, #e879f9);
+        }
+
+        .grad-gold {
+            background: linear-gradient(135deg, #d97706, #f59e0b, #fcd34d);
+        }
+
+        .projet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.85rem;
+        }
+
+        .projet-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+        }
+
+        .projet-stats {
+            font-size: 0.95rem;
+            margin-bottom: 0.8rem;
+            opacity: 0.95;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.28);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 999px;
+            box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .quick-add-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-quick {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.22);
+            border: 1.5px solid rgba(255, 255, 255, 0.45);
+            color: white;
+            padding: 0.5rem;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-quick:hover {
+            background: white;
+            color: #0f172a;
+            transform: scale(1.05);
+        }
+
+        /* ================= CHARTS & LISTES ================= */
+        .chart-bar-item {
+            margin-top: 1.15rem;
+        }
+
+        .chart-bar-label {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 0.92rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .chart-bar-bg {
+            height: 12px;
+            background: rgba(148, 163, 184, 0.25);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .chart-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+            border-radius: 999px;
+            transition: width 0.6s ease;
+        }
+
+        .mini-projet-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.9rem 0;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+        }
+
+        /* ================= FORMULAIRES & BOUTONS ================= */
+        .stack-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+            margin-top: 1.1rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.9rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 0.9rem;
+            align-items: end;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+
+        input,
+        select {
+            padding: 0.72rem 0.95rem;
+            border-radius: 12px;
+            border: 1.5px solid rgba(148, 163, 184, 0.35);
+            background: rgba(255, 255, 255, 0.92);
+            color: #0f172a;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent-1);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+        }
+
+        .type-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.6rem;
+        }
+
+        .radio-card input {
+            display: none;
+        }
+
+        .radio-card span {
+            display: block;
+            text-align: center;
+            padding: 0.7rem;
+            border-radius: 12px;
+            border: 2px solid rgba(148, 163, 184, 0.3);
+            cursor: pointer;
+            font-weight: 800;
+            transition: 0.2s;
+        }
+
+        .radio-card input:checked+span {
+            background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn {
+            padding: 0.8rem 1.35rem;
+            border: none;
+            border-radius: 14px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .btn-glow {
+            background: linear-gradient(135deg, #f59e0b, #ec4899, #8b5cf6);
+            background-size: 200% auto;
+            color: white;
+            box-shadow: 0 8px 22px rgba(236, 72, 153, 0.45);
+        }
+
+        .btn-glow:hover {
+            background-position: right center;
+            transform: translateY(-3px) scale(1.03);
+        }
+
+        .btn-primary {
+            background: var(--accent-1);
+            color: white;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn-link {
+            background: none;
+            border: none;
+            color: var(--accent-1);
+            font-weight: 800;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        /* ================= HISTORIQUE, BADGES & THÈMES ================= */
+        .filters-bar {
+            display: flex;
+            gap: 0.65rem;
+            margin: 1rem 0;
+        }
+
+        .operations-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-height: 440px;
+            overflow-y: auto;
+        }
+
+        .op-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.95rem 1.1rem;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.68);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: transform 0.2s;
+        }
+
+        .op-item:hover {
+            transform: translateX(4px);
+        }
+
+        .themes-grid,
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1.1rem;
+        }
+
+        .theme-btn {
+            padding: 1.15rem;
+            border-radius: 16px;
+            border: 2px solid rgba(148, 163, 184, 0.35);
+            background: rgba(255, 255, 255, 0.75);
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .theme-btn:hover {
+            transform: translateY(-4px) scale(1.03);
+            border-color: var(--accent-1);
+        }
+
+        .badge-card {
+            padding: 1.4rem;
+            border-radius: 20px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.65);
+            border: 2px solid transparent;
+            transition: 0.3s;
+        }
+
+        .badge-card.unlocked {
+            background: linear-gradient(135deg, rgba(253, 224, 71, 0.45), rgba(244, 114, 182, 0.35));
+            border-color: #f59e0b;
+            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.25);
+        }
+
+        .badge-card.locked {
+            opacity: 0.48;
+            filter: grayscale(1);
+        }
+
+        .api-box {
+            padding: 1.4rem;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.75);
+            border: 1.5px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 26px;
+            right: 26px;
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            font-weight: 700;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            transform: translateY(130px);
+            opacity: 0;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 9999;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .mt-1 {
+            margin-top: 1.1rem;
+        }
+
+        .mb-1 {
+            margin-bottom: 1.4rem;
+        }
+
+        .max-w-800 {
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
+        .card-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.6rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Fond animé flottant -->
+    <div class="bg-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <!-- Canvas pour les confettis -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Barre de navigation supérieure -->
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <span class="brand-logo">🚀</span>
+                <div>
+                    <h1>BudgetQuest</h1>
+                    <span class="binome-tag">✨ Intissar MESTIRI & Moataza</span>
+                </div>
+            </div>
+
+            <!-- Menu Multi-pages -->
+            <nav class="nav-links" id="main-nav">
+                <button class="nav-btn active" data-page="page-dashboard">🏠 Tableau de bord</button>
+                <button class="nav-btn" data-page="page-projets">🎯 Projets & Cagnottes</button>
+                <button class="nav-btn" data-page="page-operations">💳 Opérations</button>
+                <button class="nav-btn" data-page="page-calendrier">🗓️ Calendrier API</button>
+                <button class="nav-btn" data-page="page-defis">🏆 Défis & Thèmes</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- ==================== PAGE 1 : TABLEAU DE BORD ==================== -->
+        <section id="page-dashboard" class="page-view active">
+            <div class="welcome-banner">
+                <div>
+                    <h2>Bienvenue dans votre espace financier ! ✨</h2>
+                    <p>Pilotez vos projets à deux, anticipez les imprévus et faites grimper vos cagnottes.</p>
+                </div>
+                <button class="btn btn-glow" onclick="naviguerVers('page-operations')">+ Nouvelle Opération</button>
+            </div>
+
+            <!-- KPI Animés -->
+            <div class="kpi-grid">
+                <div class="kpi-card card-green">
+                    <div class="kpi-icon">💰</div>
+                    <div>
+                        <span class="kpi-label">Revenus Totaux</span>
+                        <h3 class="kpi-value" id="kpi-revenus">0,00 €</h3>
+                    </div>
+                </div>
+                <div class="kpi-card card-pink">
+                    <div class="kpi-icon">🛍️</div>
+                    <div>
+                        <span class="kpi-label">Dépenses Totales</span>
+                        <h3 class="kpi-value" id="kpi-depenses">0,00 €</h3>
+                    </div>
+                </div>
+                <div class="kpi-card card-purple">
+                    <div class="kpi-icon">🐷</div>
+                    <div>
+                        <span class="kpi-label">Dans les Cagnottes</span>
+                        <h3 class="kpi-value" id="kpi-epargne">0,00 €</h3>
+                    </div>
+                </div>
+                <div class="kpi-card card-blue">
+                    <div class="kpi-icon">✨</div>
+                    <div>
+                        <span class="kpi-label">Le Reste à Vivre</span>
+                        <h3 class="kpi-value" id="kpi-reste">0,00 €</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Aperçu visuel rapide -->
+            <div class="dashboard-split">
+                <div class="glass-card">
+                    <h3>📊 Répartition de votre budget</h3>
+                    <div id="chart-repartition" class="chart-bars"></div>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-header-flex">
+                        <h3>🔥 Vos Projets en cours</h3>
+                        <button class="btn-link" onclick="naviguerVers('page-projets')">Tout voir →</button>
+                    </div>
+                    <div id="dashboard-projets-preview" class="mini-projets-list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PAGE 2 : PROJETS & CAGNOTTES ==================== -->
+        <section id="page-projets" class="page-view">
+            <div class="page-header">
+                <div>
+                    <h2>🎯 Vos Projets, Voyage, Imprévus & Cagnottes</h2>
+                    <p>Cliquez sur les boutons rapides (+10 €, +50 €) pour alimenter vos cagnottes instantanément !</p>
+                </div>
+                <button id="btn-show-new-projet" class="btn btn-glow">+ Créer un Projet</button>
+            </div>
+
+            <!-- Formulaire création projet -->
+            <form id="form-nouveau-projet" class="glass-card form-grid hidden">
+                <div class="form-group">
+                    <label>Nom du projet</label>
+                    <input type="text" id="nom-projet" placeholder="Ex: Vacances Bali, Shopping, Auto..." required>
+                </div>
+                <div class="form-group">
+                    <label>Icône / Emoji</label>
+                    <input type="text" id="icone-projet" value="🌴" maxlength="4" required>
+                </div>
+                <div class="form-group">
+                    <label>Objectif (€)</label>
+                    <input type="number" id="objectif-projet" placeholder="1000" min="1" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label>Couleur de la carte</label>
+                    <select id="couleur-projet">
+                        <option value="grad-blue">Bleu Lagon</option>
+                        <option value="grad-sunset">Coucher de Soleil</option>
+                        <option value="grad-emerald">Vert Émeraude</option>
+                        <option value="grad-purple">Violet Galaxie</option>
+                        <option value="grad-gold">Or & Ambre</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Valider le Projet</button>
+            </form>
+
+            <!-- Grille complète des cagnottes -->
+            <div id="grille-projets" class="projets-grid"></div>
+        </section>
+
+        <!-- ==================== PAGE 3 : OPÉRATIONS & HISTORIQUE ==================== -->
+        <section id="page-operations" class="page-view">
+            <div class="two-columns">
+                <div class="glass-card">
+                    <h2>💳 Enregistrer un mouvement</h2>
+                    <form id="form-budget" class="stack-form">
+                        <div class="type-selector">
+                            <label class="radio-card">
+                                <input type="radio" name="type-op" value="depense" checked>
+                                <span>💸 Dépense</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="type-op" value="revenu">
+                                <span>💰 Revenu</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="type-op" value="epargne">
+                                <span>🐷 Cagnotte</span>
+                            </label>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="date-operation" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Montant (€)</label>
+                                <input type="number" id="montant-operation" placeholder="0.00" min="0.01" step="0.01"
+                                    required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Libellé de l'opération</label>
+                            <input type="text" id="titre-operation"
+                                placeholder="Ex: Billets train, Salaire, Réparation..." required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Projet / Catégorie associée</label>
+                            <select id="categorie-projet"></select>
+                        </div>
+
+                        <button type="submit" class="btn btn-glow btn-full">✨ Enregistrer l'opération</button>
+                    </form>
+                </div>
+
+                <div class="glass-card">
+                    <div class="card-header-flex">
+                        <h2>📜 Historique</h2>
+                        <input type="text" id="search-op" placeholder="🔍 Rechercher...">
+                    </div>
+
+                    <div class="filters-bar">
+                        <select id="filtre-projet">
+                            <option value="TOUS">Tous les projets</option>
+                        </select>
+                        <select id="filtre-type">
+                            <option value="TOUS">Tous les types</option>
+                            <option value="revenu">Revenus</option>
+                            <option value="depense">Dépenses</option>
+                            <option value="epargne">Cagnottes</option>
+                        </select>
+                    </div>
+
+                    <div id="liste-operations" class="operations-feed"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PAGE 4 : CALENDRIER API ==================== -->
+        <section id="page-calendrier" class="page-view">
+            <div class="glass-card max-w-800">
+                <h2>🗓️ Explorateur Jours Fériés & Vacances Scolaires</h2>
+                <p style="opacity:0.8; margin-top:0.3rem;">Interrogez les API officielles de l'État pour planifier vos
+                    voyages et budgets en binôme.</p>
+
+                <div class="form-row mt-1">
+                    <div class="form-group">
+                        <label>Choisir une date</label>
+                        <input type="date" id="date-verif">
+                    </div>
+                    <div class="form-group">
+                        <label>Zone Académique</label>
+                        <select id="zone-scolaire">
+                            <option value="Zone C" selected>Zone C (Île-de-France, Montpellier, Toulouse)</option>
+                            <option value="Zone A">Zone A (Lyon, Bordeaux, Grenoble, Poitiers)</option>
+                            <option value="Zone B">Zone B (Lille, Marseille, Nantes, Strasbourg)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button id="btn-verifier" class="btn btn-glow btn-full mt-1">🚀 Lancer l'analyse en direct</button>
+
+                <div id="resultat-api" class="api-box mt-1">
+                    Sélectionnez une date ci-dessus pour découvrir s'il s'agit d'un jour férié ou des vacances !
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== PAGE 5 : DÉFIS, BADGES & THÈMES ==================== -->
+        <section id="page-defis" class="page-view">
+            <div class="glass-card mb-1">
+                <h2>🎨 Changer l'ambiance & les couleurs du fond</h2>
+                <p style="opacity:0.8; margin-top:0.25rem;">Cliquez sur un thème pour transformer toute l'interface :
+                </p>
+                <div class="themes-grid mt-1">
+                    <button class="theme-btn" onclick="changerTheme('aurora')">🌈 Aurore Boréale</button>
+                    <button class="theme-btn" onclick="changerTheme('sunset')">🌅 Coucher de Soleil</button>
+                    <button class="theme-btn" onclick="changerTheme('emerald')">🌿 Lagon Émeraude</button>
+                    <button class="theme-btn" onclick="changerTheme('galaxy')">🌌 Nuit Galaxie Néon</button>
+                </div>
+            </div>
+
+            <div class="glass-card mb-1">
+                <h2>🏆 Vos Badges & Récompenses Binôme</h2>
+                <div id="badges-grid" class="badges-grid mt-1"></div>
+            </div>
+
+            <div class="glass-card">
+                <h2>⚙️ Sauvegarde & Partage Binôme</h2>
+                <div style="display:flex; gap:0.8rem; flex-wrap:wrap;" class="mt-1">
+                    <button id="btn-export" class="btn btn-primary">⬇️ Exporter vos données (.json)</button>
+                    <button id="btn-reset" class="btn btn-danger">🗑️ Remettre à zéro</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Notification Toast flottante -->
+    <div id="toast" class="toast"></div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
